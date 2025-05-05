@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Eye, Heart, ShoppingCart } from "lucide-react";
-import { ProductType } from "@/types/product";
+import { ProductType } from "@/types/products";
 
 interface FeaturedProductProps {
   product: ProductType;

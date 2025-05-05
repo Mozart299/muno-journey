@@ -1,4 +1,3 @@
-// components/GiftFinderPanel.tsx
 "use client";
 
 import { useState } from "react";
@@ -11,37 +10,42 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Gift, Search, Heart, DollarSign, CalendarDays, User, ChevronRight, ArrowRight } from "lucide-react";
 
+// Define types for our options
+type OccasionId = "birthday" | "anniversary" | "wedding" | "graduation" | "housewarming" | "thank-you" | "congratulations" | "other" | "";
+type RecipientId = "for-her" | "for-him" | "for-couples" | "for-kids" | "for-friends" | "for-family" | "";
+type InterestId = "reading" | "cooking" | "self-care" | "home-decor" | "travel" | "faith" | "writing" | "art" | "coffee";
+
 // Questions and options
 const occasions = [
-  { id: "birthday", label: "Birthday", icon: <CalendarDays className="h-5 w-5" /> },
-  { id: "anniversary", label: "Anniversary", icon: <CalendarDays className="h-5 w-5" /> },
-  { id: "wedding", label: "Wedding", icon: <Gift className="h-5 w-5" /> },
-  { id: "graduation", label: "Graduation", icon: <Gift className="h-5 w-5" /> },
-  { id: "housewarming", label: "Housewarming", icon: <Gift className="h-5 w-5" /> },
-  { id: "thank-you", label: "Thank You", icon: <Heart className="h-5 w-5" /> },
-  { id: "congratulations", label: "Congratulations", icon: <Gift className="h-5 w-5" /> },
-  { id: "other", label: "Other", icon: <Gift className="h-5 w-5" /> },
+  { id: "birthday" as const, label: "Birthday", icon: <CalendarDays className="h-5 w-5" /> },
+  { id: "anniversary" as const, label: "Anniversary", icon: <CalendarDays className="h-5 w-5" /> },
+  { id: "wedding" as const, label: "Wedding", icon: <Gift className="h-5 w-5" /> },
+  { id: "graduation" as const, label: "Graduation", icon: <Gift className="h-5 w-5" /> },
+  { id: "housewarming" as const, label: "Housewarming", icon: <Gift className="h-5 w-5" /> },
+  { id: "thank-you" as const, label: "Thank You", icon: <Heart className="h-5 w-5" /> },
+  { id: "congratulations" as const, label: "Congratulations", icon: <Gift className="h-5 w-5" /> },
+  { id: "other" as const, label: "Other", icon: <Gift className="h-5 w-5" /> },
 ];
 
 const recipients = [
-  { id: "for-her", label: "For Her", icon: <User className="h-5 w-5" /> },
-  { id: "for-him", label: "For Him", icon: <User className="h-5 w-5" /> },
-  { id: "for-couples", label: "For Couples", icon: <User className="h-5 w-5" /> },
-  { id: "for-kids", label: "For Kids", icon: <User className="h-5 w-5" /> },
-  { id: "for-friends", label: "For Friends", icon: <User className="h-5 w-5" /> },
-  { id: "for-family", label: "For Family", icon: <User className="h-5 w-5" /> },
+  { id: "for-her" as const, label: "For Her", icon: <User className="h-5 w-5" /> },
+  { id: "for-him" as const, label: "For Him", icon: <User className="h-5 w-5" /> },
+  { id: "for-couples" as const, label: "For Couples", icon: <User className="h-5 w-5" /> },
+  { id: "for-kids" as const, label: "For Kids", icon: <User className="h-5 w-5" /> },
+  { id: "for-friends" as const, label: "For Friends", icon: <User className="h-5 w-5" /> },
+  { id: "for-family" as const, label: "For Family", icon: <User className="h-5 w-5" /> },
 ];
 
 const interests = [
-  { id: "reading", label: "Reading" },
-  { id: "cooking", label: "Cooking" },
-  { id: "self-care", label: "Self-care" },
-  { id: "home-decor", label: "Home Decor" },
-  { id: "travel", label: "Travel" },
-  { id: "faith", label: "Faith & Spirituality" },
-  { id: "writing", label: "Writing & Journaling" },
-  { id: "art", label: "Art & Creativity" },
-  { id: "coffee", label: "Coffee & Tea" },
+  { id: "reading" as const, label: "Reading" },
+  { id: "cooking" as const, label: "Cooking" },
+  { id: "self-care" as const, label: "Self-care" },
+  { id: "home-decor" as const, label: "Home Decor" },
+  { id: "travel" as const, label: "Travel" },
+  { id: "faith" as const, label: "Faith & Spirituality" },
+  { id: "writing" as const, label: "Writing & Journaling" },
+  { id: "art" as const, label: "Art & Creativity" },
+  { id: "coffee" as const, label: "Coffee & Tea" },
 ];
 
 interface GiftFinderPanelProps {
@@ -51,14 +55,14 @@ interface GiftFinderPanelProps {
 export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [selectedOccasion, setSelectedOccasion] = useState<string>("");
-  const [selectedRecipient, setSelectedRecipient] = useState<string>("");
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [selectedOccasion, setSelectedOccasion] = useState<OccasionId>("");
+  const [selectedRecipient, setSelectedRecipient] = useState<RecipientId>("");
+  const [selectedInterests, setSelectedInterests] = useState<InterestId[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([100000]);
   const [customOccasion, setCustomOccasion] = useState("");
   
   // Toggle interest selection
-  const toggleInterest = (id: string) => {
+  const toggleInterest = (id: InterestId) => {
     setSelectedInterests(prev => 
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
@@ -73,7 +77,8 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
       const searchParams = new URLSearchParams();
       
       if (selectedOccasion) {
-        searchParams.append("occasion", selectedOccasion);
+        const occasionValue = selectedOccasion === "other" ? customOccasion : selectedOccasion;
+        searchParams.append("occasion", occasionValue);
       }
       
       if (selectedRecipient) {
@@ -103,7 +108,7 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
   const canProceed = () => {
     switch (step) {
       case 1:
-        return selectedOccasion !== "" || (selectedOccasion === "other" && customOccasion !== "");
+        return selectedOccasion !== "" && (selectedOccasion !== "other" || customOccasion !== "");
       case 2:
         return selectedRecipient !== "";
       case 3:
@@ -113,6 +118,11 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
       default:
         return false;
     }
+  };
+  
+  // Format price for display
+  const formatPrice = (price: number): string => {
+    return `UGX ${price.toLocaleString()}`;
   };
   
   return (
@@ -153,7 +163,7 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
               
               <RadioGroup 
                 value={selectedOccasion} 
-                onValueChange={setSelectedOccasion}
+                onValueChange={(value) => setSelectedOccasion(value as OccasionId)}
                 className="grid grid-cols-2 gap-3"
               >
                 {occasions.map((occasion) => (
@@ -198,7 +208,7 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
               
               <RadioGroup 
                 value={selectedRecipient} 
-                onValueChange={setSelectedRecipient}
+                onValueChange={(value) => setSelectedRecipient(value as RecipientId)}
                 className="grid grid-cols-2 gap-3"
               >
                 {recipients.map((recipient) => (
@@ -233,8 +243,8 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
                   <div key={interest.id} className="flex items-center space-x-2">
                     <Checkbox 
                       id={`interest-${interest.id}`} 
-                      checked={selectedInterests.includes(interest.id)}
-                      onCheckedChange={() => toggleInterest(interest.id)}
+                      checked={selectedInterests.includes(interest.id as InterestId)}
+                      onCheckedChange={() => toggleInterest(interest.id as InterestId)}
                     />
                     <Label 
                       htmlFor={`interest-${interest.id}`}
@@ -263,14 +273,14 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
                 />
                 
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-sm text-gray-500">UGX 0</span>
-                  <span className="text-sm text-gray-500">UGX 300,000</span>
+                  <span className="text-sm text-gray-500">{formatPrice(0)}</span>
+                  <span className="text-sm text-gray-500">{formatPrice(300000)}</span>
                 </div>
                 
                 <div className="mt-8 p-4 bg-gray-50 rounded-lg">
                   <p className="text-center font-medium">Your maximum budget:</p>
                   <p className="text-center text-2xl font-bold text-pink-500">
-                    UGX {priceRange[0].toLocaleString()}
+                    {formatPrice(priceRange[0])}
                   </p>
                 </div>
               </div>
