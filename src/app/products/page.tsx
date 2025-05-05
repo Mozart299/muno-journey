@@ -55,12 +55,17 @@ const recipientOptions = [
 ];
 
 const categoryOptions = [
-  { id: "gift-boxes", label: "Gift Boxes" },
-  { id: "stationery", label: "Stationery" },
-  { id: "home-decor", label: "Home Decor" },
-  { id: "wellness", label: "Wellness" },
-  { id: "accessories", label: "Accessories" },
-  { id: "books", label: "Books" },
+  { id: "daily-journals", label: "Daily Journals" },
+  { id: "premium-daily-journals", label: "Premium Daily Journals" },
+  { id: "kids-prayer-journal", label: "Kids Prayer Journal" },
+  { id: "weekly-prayer-journal", label: "Weekly Prayer Journals" },
+  { id: "teens-prayer-journal", label: "Teens Prayer Journal" },
+  { id: "timeless-prayer-box", label: "Timeless Prayer Box" },
+  { id: "alphabetical-verse-cards", label: "Alphabetical Verse Cards" },
+  { id: "journal-personalisation", label: "Journal Personalisation" },
+  { id: "journal-bookmarks", label: "Journal Bookmarks" },
+  { id: "journal-supplies", label: "Journal Supplies" },
+  { id: "gratitude-jars", label: "Gratitude Jars" },
 ];
 
 export default function ProductsPage() {

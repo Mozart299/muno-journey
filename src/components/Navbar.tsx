@@ -49,8 +49,8 @@ const navLinks = [
 
 const categoryLinks = [
   { name: "Daily Journals", href: "/products?category=daily-journals" },
-  { name: "Premium Daily Journals", href: "/products?category=premium-daily Journals" },
-  { name: "Kids Prayer Journal", href: "/products?category=kids Prayer Journal" },
+  { name: "Premium Daily Journals", href: "/products?category=premium-daily-journals" },
+  { name: "Kids Prayer Journal", href: "/products?category=kids-prayer-journal" },
   { name: "Weekly Prayer Journals", href: "/products?category=weekly-prayer-journal" },
   { name: "Teens Prayer Journal", href: "/products?category=teens-prayer-journal" },
   { name: "Timeless Prayer Box", href: "/products?category=timeless-prayer-box" },

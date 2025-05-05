@@ -134,25 +134,25 @@ export default function Home() {
           <h2 className="text-3xl font-semibold text-center mb-12">Shop by Category</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <CategoryCard 
-              title="Gift Boxes" 
+              title="Daily Journals" 
               image="/categories/gift-boxes.jpg"
               count={12}
               slug="gift-boxes"
             />
             <CategoryCard 
-              title="Stationery" 
+              title="Journal Supplies" 
               image="/categories/stationery.jpg"
               count={24}
               slug="stationery"
             />
             <CategoryCard 
-              title="Home Decor" 
+              title="Alphabetical Verse Cards" 
               image="/categories/home-decor.jpg"
               count={18}
               slug="home-decor"
             />
             <CategoryCard 
-              title="Wellness" 
+              title="Gratitude Jars" 
               image="/categories/wellness.jpg"
               count={15}
               slug="wellness"
