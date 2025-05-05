@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -30,37 +31,39 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
-import { Gift, Filter, Grid3X3, LayoutGrid, SlidersHorizontal } from "lucide-react";
+import { Book, Filter, Grid3X3, LayoutGrid, SlidersHorizontal, BookOpen, User, ListChecks } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
-import GiftFinderPanel from "@/components/GiftFinderPanel";
+import JournalFinder from "@/components/JournalFinder";
 import { ProductType } from "@/types/products";
 
-const occasionOptions = [
-  { id: "birthday", label: "Birthday" },
-  { id: "anniversary", label: "Anniversary" },
-  { id: "wedding", label: "Wedding" },
-  { id: "graduation", label: "Graduation" },
-  { id: "housewarming", label: "Housewarming" },
-  { id: "thank-you", label: "Thank You" },
-  { id: "congratulations", label: "Congratulations" },
+// Updated filter options with journal-specific categories
+const journalTypeOptions = [
+  { id: "daily-journals", label: "Daily Journals" },
+  { id: "premium-daily-journals", label: "Premium Daily Journals" },
+  { id: "kids-prayer-journal", label: "Kids Prayer Journals" },
+  { id: "weekly-prayer-journal", label: "Weekly Prayer Journals" },
+  { id: "teens-prayer-journal", label: "Teens Prayer Journals" },
+  { id: "timeless-prayer-box", label: "Timeless Prayer Boxes" },
 ];
 
-const recipientOptions = [
-  { id: "for-her", label: "For Her" },
-  { id: "for-him", label: "For Him" },
-  { id: "for-couples", label: "For Couples" },
+const forWhomOptions = [
+  { id: "for-adults", label: "For Adults" },
+  { id: "for-teens", label: "For Teens" },
   { id: "for-kids", label: "For Kids" },
-  { id: "for-friends", label: "For Friends" },
+  { id: "for-couples", label: "For Couples" },
   { id: "for-family", label: "For Family" },
 ];
 
-const categoryOptions = [
-  { id: "daily-journals", label: "Daily Journals" },
-  { id: "premium-daily-journals", label: "Premium Daily Journals" },
-  { id: "kids-prayer-journal", label: "Kids Prayer Journal" },
-  { id: "weekly-prayer-journal", label: "Weekly Prayer Journals" },
-  { id: "teens-prayer-journal", label: "Teens Prayer Journal" },
-  { id: "timeless-prayer-box", label: "Timeless Prayer Box" },
+const featureOptions = [
+  { id: "scripture-references", label: "Scripture References" },
+  { id: "gratitude-section", label: "Gratitude Section" },
+  { id: "reflection-prompts", label: "Reflection Prompts" },
+  { id: "goal-setting", label: "Goal Setting" },
+  { id: "monthly-themes", label: "Monthly Themes" },
+  { id: "prayer-tracking", label: "Prayer Tracking" },
+];
+
+const accessoryOptions = [
   { id: "alphabetical-verse-cards", label: "Alphabetical Verse Cards" },
   { id: "journal-personalisation", label: "Journal Personalisation" },
   { id: "journal-bookmarks", label: "Journal Bookmarks" },
@@ -76,12 +79,13 @@ export default function ProductsPage() {
   
   // Filter states
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200000]);
-  const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
-  const [selectedRecipients, setSelectedRecipients] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedJournalTypes, setSelectedJournalTypes] = useState<string[]>([]);
+  const [selectedForWhom, setSelectedForWhom] = useState<string[]>([]);
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const [selectedAccessories, setSelectedAccessories] = useState<string[]>([]);
   const [sortOption, setSortOption] = useState("featured");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [isGiftFinderOpen, setIsGiftFinderOpen] = useState(false);
+  const [isJournalFinderOpen, setIsJournalFinderOpen] = useState(false);
   
   // Fetch products on mount (mock data)
   useEffect(() => {
@@ -90,19 +94,19 @@ export default function ProductsPage() {
       // This would be an API call in a real app
       const mockProducts: ProductType[] = Array.from({ length: 24 }, (_, index) => ({
         id: `product-${index + 1}`,
-        name: `Gift Item ${index + 1}`,
+        name: `Prayer Journal ${index + 1}`,
         price: Math.floor(Math.random() * 150000) + 25000, // Random price between 25k-175k UGX
         currency: "UGX",
         image: `/products/product-${(index % 8) + 1}.jpg`,
-        category: categoryOptions[Math.floor(Math.random() * categoryOptions.length)].id,
-        occasions: [
-          occasionOptions[Math.floor(Math.random() * occasionOptions.length)].id,
-          occasionOptions[Math.floor(Math.random() * occasionOptions.length)].id,
+        category: journalTypeOptions[Math.floor(Math.random() * journalTypeOptions.length)].id,
+        features: [
+          featureOptions[Math.floor(Math.random() * featureOptions.length)].id,
+          featureOptions[Math.floor(Math.random() * featureOptions.length)].id,
         ],
-        recipients: [
-          recipientOptions[Math.floor(Math.random() * recipientOptions.length)].id,
+        forWhom: [
+          forWhomOptions[Math.floor(Math.random() * forWhomOptions.length)].id,
         ],
-        description: `This is a beautiful handcrafted gift perfect for any occasion. Made with premium materials and attention to detail.`,
+        description: `This beautiful prayer journal features guided prompts, scripture references, and space for reflection. Perfect for establishing a consistent prayer practice.`,
         inStock: Math.random() > 0.2, // 80% chance of being in stock
       }));
       
@@ -124,24 +128,31 @@ export default function ProductsPage() {
         product => product.price >= priceRange[0] && product.price <= priceRange[1]
       );
       
-      // Filter by category
-      if (selectedCategories.length > 0) {
+      // Filter by journal type
+      if (selectedJournalTypes.length > 0) {
         result = result.filter(product => 
-          selectedCategories.includes(product.category)
+          selectedJournalTypes.includes(product.category)
         );
       }
       
-      // Filter by occasion
-      if (selectedOccasions.length > 0) {
+      // Filter by for whom
+      if (selectedForWhom.length > 0) {
         result = result.filter(product =>
-          product.occasions?.some(occasion => selectedOccasions.includes(occasion))
+          product.forWhom?.some(whom => selectedForWhom.includes(whom))
         );
       }
       
-      // Filter by recipient
-      if (selectedRecipients.length > 0) {
+      // Filter by features
+      if (selectedFeatures.length > 0) {
         result = result.filter(product =>
-          product.recipients?.some(recipient => selectedRecipients.includes(recipient))
+          product.features?.some(feature => selectedFeatures.includes(feature))
+        );
+      }
+      
+      // Filter by accessories
+      if (selectedAccessories.length > 0) {
+        result = result.filter(product =>
+          selectedAccessories.includes(product.category)
         );
       }
       
@@ -165,20 +176,25 @@ export default function ProductsPage() {
       
       setFilteredProducts(result);
     }
-  }, [products, priceRange, selectedCategories, selectedOccasions, selectedRecipients, sortOption]);
+  }, [products, priceRange, selectedJournalTypes, selectedForWhom, selectedFeatures, selectedAccessories, sortOption]);
   
-  // Check for URL parameters (for gift finder results)
+  // Check for URL parameters (for journal finder results)
   useEffect(() => {
-    const occasion = searchParams.get('occasion');
-    const recipient = searchParams.get('recipient');
+    const journalType = searchParams.get('type');
+    const forWhom = searchParams.get('for');
+    const features = searchParams.get('features');
     const priceMax = searchParams.get('priceMax');
     
-    if (occasion) {
-      setSelectedOccasions([occasion]);
+    if (journalType) {
+      setSelectedJournalTypes([journalType]);
     }
     
-    if (recipient) {
-      setSelectedRecipients([recipient]);
+    if (forWhom) {
+      setSelectedForWhom([forWhom]);
+    }
+    
+    if (features) {
+      setSelectedFeatures(features.split(','));
     }
     
     if (priceMax) {
@@ -187,20 +203,25 @@ export default function ProductsPage() {
   }, [searchParams]);
   
   // Toggle filter option
-  const toggleFilter = (type: 'occasion' | 'recipient' | 'category', id: string) => {
+  const toggleFilter = (type: 'journal-type' | 'for-whom' | 'feature' | 'accessory', id: string) => {
     switch (type) {
-      case 'occasion':
-        setSelectedOccasions(prev => 
+      case 'journal-type':
+        setSelectedJournalTypes(prev => 
           prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
         );
         break;
-      case 'recipient':
-        setSelectedRecipients(prev => 
+      case 'for-whom':
+        setSelectedForWhom(prev => 
           prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
         );
         break;
-      case 'category':
-        setSelectedCategories(prev => 
+      case 'feature':
+        setSelectedFeatures(prev => 
+          prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+        );
+        break;
+      case 'accessory':
+        setSelectedAccessories(prev => 
           prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
         );
         break;
@@ -210,9 +231,10 @@ export default function ProductsPage() {
   // Clear all filters
   const clearFilters = () => {
     setPriceRange([0, 200000]);
-    setSelectedOccasions([]);
-    setSelectedRecipients([]);
-    setSelectedCategories([]);
+    setSelectedJournalTypes([]);
+    setSelectedForWhom([]);
+    setSelectedFeatures([]);
+    setSelectedAccessories([]);
     setSortOption("featured");
   };
   
@@ -221,34 +243,34 @@ export default function ProductsPage() {
       {/* Header */}
       <div className="bg-pink-50 py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">All Products</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Prayer Journals & Accessories</h1>
           <div className="flex flex-wrap gap-2">
             <Button 
               variant="outline" 
               className="bg-white" 
-              onClick={() => setIsGiftFinderOpen(true)}
+              onClick={() => setIsJournalFinderOpen(true)}
             >
-              <Gift className="mr-2 h-4 w-4" />
-              Gift Finder
+              <Book className="mr-2 h-4 w-4" />
+              Journal Finder
             </Button>
-            {selectedCategories.length > 0 && (
+            {selectedJournalTypes.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {selectedCategories.map(cat => {
-                  const category = categoryOptions.find(c => c.id === cat);
+                {selectedJournalTypes.map(type => {
+                  const journalType = journalTypeOptions.find(t => t.id === type);
                   return (
                     <Button 
-                      key={cat} 
+                      key={type} 
                       variant="outline" 
                       className="bg-white"
-                      onClick={() => toggleFilter('category', cat)}
+                      onClick={() => toggleFilter('journal-type', type)}
                     >
-                      {category?.label} &times;
+                      {journalType?.label} &times;
                     </Button>
                   );
                 })}
               </div>
             )}
-            {(selectedOccasions.length > 0 || selectedRecipients.length > 0) && (
+            {(selectedForWhom.length > 0 || selectedFeatures.length > 0) && (
               <Button variant="link" onClick={clearFilters}>
                 Clear all filters
               </Button>
@@ -288,25 +310,28 @@ export default function ProductsPage() {
               
               <Separator />
               
-              <Accordion type="multiple" defaultValue={["category", "occasion", "recipient"]} className="space-y-4">
-                <AccordionItem value="category" className="border-none">
+              <Accordion type="multiple" defaultValue={["journal-type", "for-whom", "features", "accessories"]} className="space-y-4">
+                <AccordionItem value="journal-type" className="border-none">
                   <AccordionTrigger className="py-2 hover:no-underline">
-                    <h3 className="font-medium text-lg">Category</h3>
+                    <div className="flex items-center">
+                      <BookOpen className="h-5 w-5 text-pink-500 mr-2" />
+                      <h3 className="font-medium text-lg">Journal Type</h3>
+                    </div>
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="space-y-2">
-                      {categoryOptions.map(category => (
-                        <div key={category.id} className="flex items-center space-x-2">
+                      {journalTypeOptions.map(type => (
+                        <div key={type.id} className="flex items-center space-x-2">
                           <Checkbox 
-                            id={`category-${category.id}`} 
-                            checked={selectedCategories.includes(category.id)}
-                            onCheckedChange={() => toggleFilter('category', category.id)}
+                            id={`type-${type.id}`} 
+                            checked={selectedJournalTypes.includes(type.id)}
+                            onCheckedChange={() => toggleFilter('journal-type', type.id)}
                           />
                           <Label 
-                            htmlFor={`category-${category.id}`}
+                            htmlFor={`type-${type.id}`}
                             className="text-sm cursor-pointer"
                           >
-                            {category.label}
+                            {type.label}
                           </Label>
                         </div>
                       ))}
@@ -314,24 +339,27 @@ export default function ProductsPage() {
                   </AccordionContent>
                 </AccordionItem>
                 
-                <AccordionItem value="occasion" className="border-none">
+                <AccordionItem value="for-whom" className="border-none">
                   <AccordionTrigger className="py-2 hover:no-underline">
-                    <h3 className="font-medium text-lg">Occasion</h3>
+                    <div className="flex items-center">
+                      <User className="h-5 w-5 text-pink-500 mr-2" />
+                      <h3 className="font-medium text-lg">Who It's For</h3>
+                    </div>
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="space-y-2">
-                      {occasionOptions.map(occasion => (
-                        <div key={occasion.id} className="flex items-center space-x-2">
+                      {forWhomOptions.map(option => (
+                        <div key={option.id} className="flex items-center space-x-2">
                           <Checkbox 
-                            id={`occasion-${occasion.id}`} 
-                            checked={selectedOccasions.includes(occasion.id)}
-                            onCheckedChange={() => toggleFilter('occasion', occasion.id)}
+                            id={`whom-${option.id}`} 
+                            checked={selectedForWhom.includes(option.id)}
+                            onCheckedChange={() => toggleFilter('for-whom', option.id)}
                           />
                           <Label 
-                            htmlFor={`occasion-${occasion.id}`}
+                            htmlFor={`whom-${option.id}`}
                             className="text-sm cursor-pointer"
                           >
-                            {occasion.label}
+                            {option.label}
                           </Label>
                         </div>
                       ))}
@@ -339,24 +367,55 @@ export default function ProductsPage() {
                   </AccordionContent>
                 </AccordionItem>
                 
-                <AccordionItem value="recipient" className="border-none">
+                <AccordionItem value="features" className="border-none">
                   <AccordionTrigger className="py-2 hover:no-underline">
-                    <h3 className="font-medium text-lg">Recipient</h3>
+                    <div className="flex items-center">
+                      <ListChecks className="h-5 w-5 text-pink-500 mr-2" />
+                      <h3 className="font-medium text-lg">Features</h3>
+                    </div>
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="space-y-2">
-                      {recipientOptions.map(recipient => (
-                        <div key={recipient.id} className="flex items-center space-x-2">
+                      {featureOptions.map(feature => (
+                        <div key={feature.id} className="flex items-center space-x-2">
                           <Checkbox 
-                            id={`recipient-${recipient.id}`} 
-                            checked={selectedRecipients.includes(recipient.id)}
-                            onCheckedChange={() => toggleFilter('recipient', recipient.id)}
+                            id={`feature-${feature.id}`} 
+                            checked={selectedFeatures.includes(feature.id)}
+                            onCheckedChange={() => toggleFilter('feature', feature.id)}
                           />
                           <Label 
-                            htmlFor={`recipient-${recipient.id}`}
+                            htmlFor={`feature-${feature.id}`}
                             className="text-sm cursor-pointer"
                           >
-                            {recipient.label}
+                            {feature.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="accessories" className="border-none">
+                  <AccordionTrigger className="py-2 hover:no-underline">
+                    <div className="flex items-center">
+                      <Book className="h-5 w-5 text-pink-500 mr-2" />
+                      <h3 className="font-medium text-lg">Accessories</h3>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-2">
+                      {accessoryOptions.map(accessory => (
+                        <div key={accessory.id} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={`accessory-${accessory.id}`} 
+                            checked={selectedAccessories.includes(accessory.id)}
+                            onCheckedChange={() => toggleFilter('accessory', accessory.id)}
+                          />
+                          <Label 
+                            htmlFor={`accessory-${accessory.id}`}
+                            className="text-sm cursor-pointer"
+                          >
+                            {accessory.label}
                           </Label>
                         </div>
                       ))}
@@ -381,7 +440,7 @@ export default function ProductsPage() {
                   <SheetHeader>
                     <SheetTitle>Filters</SheetTitle>
                     <SheetDescription>
-                      Refine your product search
+                      Find your perfect prayer journal
                     </SheetDescription>
                   </SheetHeader>
                   
@@ -412,20 +471,23 @@ export default function ProductsPage() {
                     <Separator />
                     
                     <div>
-                      <h3 className="font-medium text-lg mb-4">Category</h3>
+                      <h3 className="font-medium text-lg mb-4 flex items-center">
+                        <BookOpen className="h-5 w-5 text-pink-500 mr-2" />
+                        Journal Type
+                      </h3>
                       <div className="space-y-2">
-                        {categoryOptions.map(category => (
-                          <div key={category.id} className="flex items-center space-x-2">
+                        {journalTypeOptions.map(type => (
+                          <div key={type.id} className="flex items-center space-x-2">
                             <Checkbox 
-                              id={`mobile-category-${category.id}`} 
-                              checked={selectedCategories.includes(category.id)}
-                              onCheckedChange={() => toggleFilter('category', category.id)}
+                              id={`mobile-type-${type.id}`} 
+                              checked={selectedJournalTypes.includes(type.id)}
+                              onCheckedChange={() => toggleFilter('journal-type', type.id)}
                             />
                             <Label 
-                              htmlFor={`mobile-category-${category.id}`}
+                              htmlFor={`mobile-type-${type.id}`}
                               className="text-sm cursor-pointer"
                             >
-                              {category.label}
+                              {type.label}
                             </Label>
                           </div>
                         ))}
@@ -435,20 +497,23 @@ export default function ProductsPage() {
                     <Separator />
                     
                     <div>
-                      <h3 className="font-medium text-lg mb-4">Occasion</h3>
+                      <h3 className="font-medium text-lg mb-4 flex items-center">
+                        <User className="h-5 w-5 text-pink-500 mr-2" />
+                        Who It's For
+                      </h3>
                       <div className="space-y-2">
-                        {occasionOptions.map(occasion => (
-                          <div key={occasion.id} className="flex items-center space-x-2">
+                        {forWhomOptions.map(option => (
+                          <div key={option.id} className="flex items-center space-x-2">
                             <Checkbox 
-                              id={`mobile-occasion-${occasion.id}`} 
-                              checked={selectedOccasions.includes(occasion.id)}
-                              onCheckedChange={() => toggleFilter('occasion', occasion.id)}
+                              id={`mobile-whom-${option.id}`} 
+                              checked={selectedForWhom.includes(option.id)}
+                              onCheckedChange={() => toggleFilter('for-whom', option.id)}
                             />
                             <Label 
-                              htmlFor={`mobile-occasion-${occasion.id}`}
+                              htmlFor={`mobile-whom-${option.id}`}
                               className="text-sm cursor-pointer"
                             >
-                              {occasion.label}
+                              {option.label}
                             </Label>
                           </div>
                         ))}
@@ -458,20 +523,23 @@ export default function ProductsPage() {
                     <Separator />
                     
                     <div>
-                      <h3 className="font-medium text-lg mb-4">Recipient</h3>
+                      <h3 className="font-medium text-lg mb-4 flex items-center">
+                        <ListChecks className="h-5 w-5 text-pink-500 mr-2" />
+                        Features
+                      </h3>
                       <div className="space-y-2">
-                        {recipientOptions.map(recipient => (
-                          <div key={recipient.id} className="flex items-center space-x-2">
+                        {featureOptions.map(feature => (
+                          <div key={feature.id} className="flex items-center space-x-2">
                             <Checkbox 
-                              id={`mobile-recipient-${recipient.id}`} 
-                              checked={selectedRecipients.includes(recipient.id)}
-                              onCheckedChange={() => toggleFilter('recipient', recipient.id)}
+                              id={`mobile-feature-${feature.id}`} 
+                              checked={selectedFeatures.includes(feature.id)}
+                              onCheckedChange={() => toggleFilter('feature', feature.id)}
                             />
                             <Label 
-                              htmlFor={`mobile-recipient-${recipient.id}`}
+                              htmlFor={`mobile-feature-${feature.id}`}
                               className="text-sm cursor-pointer"
                             >
-                              {recipient.label}
+                              {feature.label}
                             </Label>
                           </div>
                         ))}
@@ -598,26 +666,55 @@ export default function ProductsPage() {
               </div>
             ) : (
               <div className="text-center py-16">
-                <h3 className="text-lg font-medium mb-2">No products found</h3>
-                <p className="text-gray-500 mb-6">Try changing your filters to find what you're looking for.</p>
+                <h3 className="text-lg font-medium mb-2">No journals found</h3>
+                <p className="text-gray-500 mb-6">Try adjusting your filters to find what you're looking for.</p>
                 <Button onClick={clearFilters}>Clear all filters</Button>
+              </div>
+            )}
+            
+            {/* Journal Subscription CTA */}
+            {!isLoading && filteredProducts.length > 0 && (
+              <div className="mt-16 bg-pink-50 rounded-lg p-6 shadow-sm">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="md:w-2/3">
+                    <h3 className="text-xl font-bold mb-2">Never Run Out of Journal Space</h3>
+                    <p className="text-gray-600 mb-4">
+                      Subscribe to receive fresh journals delivered right to your door on your schedule. 
+                      Save up to 20% and maintain your journaling practice without interruption.
+                    </p>
+                    <Button className="bg-pink-500 hover:bg-pink-600" asChild>
+                      <Link href="/subscription">
+                        View Subscription Plans
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="md:w-1/3">
+                    <img 
+                      src="/subscription-feature.jpg" 
+                      alt="Journal subscription" 
+                      className="rounded-lg shadow-md"
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
       
-      {/* Gift Finder Sheet */}
-      <Sheet open={isGiftFinderOpen} onOpenChange={setIsGiftFinderOpen}>
+      {/* Journal Finder Sheet */}
+      <Sheet open={isJournalFinderOpen} onOpenChange={setIsJournalFinderOpen}>
         <SheetContent side="right" className="sm:max-w-lg">
           <SheetHeader>
-            <SheetTitle>Gift Finder</SheetTitle>
+            <SheetTitle>Journal Finder</SheetTitle>
             <SheetDescription>
-              Answer a few questions to find the perfect gift
+              Find the perfect journal for your spiritual journey
             </SheetDescription>
           </SheetHeader>
           
-          <GiftFinderPanel onClose={() => setIsGiftFinderOpen(false)} />
+          <div className="mt-6">
+            <JournalFinder />
+          </div>
         </SheetContent>
       </Sheet>
     </div>

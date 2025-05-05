@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -17,6 +18,8 @@ import CategoryCard from "@/components/CategoryCard";
 import FeaturedProduct from "@/components/FeaturedProduct";
 import TestimonialCard from "@/components/TestimonialCard";
 import GiftFinderBanner from "@/components/GifitFinderBanner";
+import JournalFinderBanner from "@/components/JournalFinderBanner";
+import FeaturedJournalsSection from "@/components/FeaturedJournalsSection";
 import { ProductType } from "@/types/products";
 
 export default function Home() {
@@ -29,70 +32,70 @@ export default function Home() {
     setFeaturedProducts([
       {
         id: "1",
-        name: "Personalized Gift Box",
-        price: 85000,
+        name: "Premium Daily Prayer Journal",
+        price: 55000,
         currency: "UGX",
-        image: "/products/gift-box-1.jpg",
-        category: "gift-boxes",
+        image: "/products/premium-daily-journal.jpg",
+        category: "premium-daily-journals",
       },
       {
         id: "2",
-        name: "Handcrafted Journal",
-        price: 45000,
+        name: "Kids Prayer Journal",
+        price: 35000,
         currency: "UGX",
-        image: "/products/journal-1.jpg",
-        category: "stationery",
+        image: "/products/kids-journal.jpg",
+        category: "kids-prayer-journal",
       },
       {
         id: "3",
-        name: "Artisan Candle Set",
-        price: 65000,
+        name: "Weekly Prayer Journal",
+        price: 45000,
         currency: "UGX",
-        image: "/products/candle-set-1.jpg",
-        category: "home-decor",
+        image: "/products/weekly-journal.jpg",
+        category: "weekly-prayer-journal",
       },
       {
         id: "4",
-        name: "Inspirational Wall Art",
-        price: 55000,
+        name: "Teens Prayer Journal",
+        price: 40000,
         currency: "UGX",
-        image: "/products/wall-art-1.jpg",
-        category: "home-decor",
+        image: "/products/teens-journal.jpg",
+        category: "teens-prayer-journal",
       },
     ]);
     
     setNewArrivals([
       {
         id: "5",
-        name: "Limited Edition Gift Set",
+        name: "Timeless Prayer Box",
         price: 95000,
         currency: "UGX",
-        image: "/products/gift-set-1.jpg",
-        category: "gift-boxes",
+        image: "/products/timeless-prayer-box.jpg",
+        category: "timeless-prayer-box",
       },
       {
         id: "6",
-        name: "Handmade Greeting Cards",
+        name: "Alphabetical Verse Cards",
         price: 25000,
         currency: "UGX",
-        image: "/products/cards-1.jpg",
-        category: "stationery",
+        image: "/products/verse-cards.jpg",
+        category: "alphabetical-verse-cards",
       },
       {
         id: "7",
-        name: "Premium Diffuser",
-        price: 75000,
+        name: "Journal Bookmarks",
+        price: 15000,
         currency: "UGX",
-        image: "/products/diffuser-1.jpg",
-        category: "home-decor",
+        image: "/products/journal-bookmarks.jpg",
+        category: "journal-bookmarks",
       },
       {
         id: "8",
-        name: "Conversation Cards",
+        name: "Journal Supplies Set",
         price: 35000,
         currency: "UGX",
-        image: "/products/conversation-cards-1.jpg",
-        category: "wellness",
+        image: "/products/journal-supplies.jpg",
+        category: "journal-supplies",
       },
     ]);
   }, []);
@@ -104,24 +107,28 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2 mb-8 md:mb-0 space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-              Thoughtful Gifts for<br />Every Occasion
+              Deepen Your Spiritual Journey
             </h1>
             <p className="text-gray-700 text-lg max-w-md">
-              Discover unique, handcrafted gifts that create meaningful moments and lasting memories.
+              Discover our beautifully crafted prayer journals and spiritual gifts designed to enrich your faith and daily practice.
             </p>
             <div className="flex space-x-4 pt-4">
-              <Button className="bg-pink-500 hover:bg-pink-600">
-                Shop Now
+              <Button className="bg-pink-500 hover:bg-pink-600" asChild>
+                <Link href="/products">
+                  Shop Journals
+                </Link>
               </Button>
-              <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
-                Gift Finder
+              <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50" asChild>
+                <Link href="/journal-finder">
+                  Journal Finder
+                </Link>
               </Button>
             </div>
           </div>
           <div className="md:w-1/2 relative">
             <img
               src="/hero-image.jpg"
-              alt="Curated gift collection"
+              alt="Prayer journal collection"
               className="rounded-lg shadow-lg"
             />
           </div>
@@ -135,33 +142,39 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <CategoryCard 
               title="Daily Journals" 
-              image="/categories/gift-boxes.jpg"
+              image="/categories/daily-journals.jpg"
               count={12}
-              slug="gift-boxes"
+              slug="daily-journals"
             />
             <CategoryCard 
               title="Journal Supplies" 
-              image="/categories/stationery.jpg"
+              image="/categories/journal-supplies.jpg"
               count={24}
-              slug="stationery"
+              slug="journal-supplies"
             />
             <CategoryCard 
-              title="Alphabetical Verse Cards" 
-              image="/categories/home-decor.jpg"
+              title="Verse Cards" 
+              image="/categories/verse-cards.jpg"
               count={18}
-              slug="home-decor"
+              slug="alphabetical-verse-cards"
             />
             <CategoryCard 
-              title="Gratitude Jars" 
-              image="/categories/wellness.jpg"
+              title="Prayer Boxes" 
+              image="/categories/prayer-boxes.jpg"
               count={15}
-              slug="wellness"
+              slug="timeless-prayer-box"
             />
           </div>
         </div>
       </section>
 
-      {/* Gift Finder */}
+      {/* Journal Finder */}
+      <JournalFinderBanner />
+
+      {/* Featured Journals Section */}
+      <FeaturedJournalsSection />
+
+      {/* Gift Finder - Keep this if you also want to offer general gifts */}
       <GiftFinderBanner />
 
       {/* Featured & New Arrivals Tabs */}
@@ -211,16 +224,18 @@ export default function Home() {
             <div className="lg:w-1/2 space-y-6">
               <h2 className="text-3xl font-semibold">Our Story</h2>
               <p className="text-gray-700">
-                Muno Journey began with a simple idea: to create meaningful gifts that help people connect. 
-                What started as a small passion project has grown into a curated collection of thoughtful items 
-                designed to celebrate special moments and everyday joy.
+                Muno Journey began with a simple idea: to create meaningful prayer journals that help 
+                people grow in their spiritual walk. What started as a small passion project has grown 
+                into a collection of thoughtfully designed journals and spiritual gifts.
               </p>
               <p className="text-gray-700">
-                Each product in our collection is carefully selected to bring warmth, joy, and meaning 
-                to your life and the lives of those you cherish.
+                Each product in our collection is carefully created to enhance your spiritual journey, 
+                helping you build consistency in prayer and reflection.
               </p>
-              <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
-                Read More
+              <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50" asChild>
+                <Link href="/about">
+                  Read More
+                </Link>
               </Button>
             </div>
           </div>
@@ -233,31 +248,31 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="space-y-3">
               <div className="flex justify-center">
-                <img src="/icons/handcrafted.svg" alt="Handcrafted" className="h-16 w-16" />
+                <img src="/icons/beautifully-designed.svg" alt="Beautifully Designed" className="h-16 w-16" />
               </div>
-              <h3 className="font-semibold">Handcrafted</h3>
-              <p className="text-sm text-gray-600">Each item is made with care and attention to detail</p>
+              <h3 className="font-semibold">Beautifully Designed</h3>
+              <p className="text-sm text-gray-600">Thoughtful layouts that enhance your prayer practice</p>
             </div>
             <div className="space-y-3">
               <div className="flex justify-center">
-                <img src="/icons/sustainable.svg" alt="Sustainable" className="h-16 w-16" />
+                <img src="/icons/scripture-based.svg" alt="Scripture Based" className="h-16 w-16" />
               </div>
-              <h3 className="font-semibold">Sustainable</h3>
-              <p className="text-sm text-gray-600">Eco-friendly materials and practices</p>
+              <h3 className="font-semibold">Scripture Based</h3>
+              <p className="text-sm text-gray-600">Integrated Bible verses and references</p>
             </div>
             <div className="space-y-3">
               <div className="flex justify-center">
-                <img src="/icons/local.svg" alt="Locally Inspired" className="h-16 w-16" />
+                <img src="/icons/quality-materials.svg" alt="Quality Materials" className="h-16 w-16" />
               </div>
-              <h3 className="font-semibold">Locally Inspired</h3>
-              <p className="text-sm text-gray-600">Designs inspired by Ugandan culture and beauty</p>
+              <h3 className="font-semibold">Quality Materials</h3>
+              <p className="text-sm text-gray-600">Premium paper and binding that lasts</p>
             </div>
             <div className="space-y-3">
               <div className="flex justify-center">
-                <img src="/icons/quality.svg" alt="Premium Quality" className="h-16 w-16" />
+                <img src="/icons/guided-prompts.svg" alt="Guided Prompts" className="h-16 w-16" />
               </div>
-              <h3 className="font-semibold">Premium Quality</h3>
-              <p className="text-sm text-gray-600">Only the finest materials and craftsmanship</p>
+              <h3 className="font-semibold">Guided Prompts</h3>
+              <p className="text-sm text-gray-600">Thoughtful prompts to deepen your reflection</p>
             </div>
           </div>
         </div>
@@ -271,21 +286,21 @@ export default function Home() {
             <CarouselContent>
               <CarouselItem>
                 <TestimonialCard 
-                  quote="The gift box I ordered was beautifully wrapped and the items inside were perfect. My friend loved it!"
+                  quote="My prayer journal has transformed my spiritual life. I used to struggle with consistency in prayer, but writing in my journal daily has helped me develop a meaningful practice."
                   author="Sarah K."
                   location="Kampala"
                 />
               </CarouselItem>
               <CarouselItem>
                 <TestimonialCard 
-                  quote="The gift finder tool helped me choose the perfect gift for my mother when I was completely stuck. Highly recommend!"
+                  quote="The structure of Muno Journey's prayer journals has been perfect for me. I never knew what to write before, but the prompts and scripture references guide me each day."
                   author="David M."
                   location="Entebbe"
                 />
               </CarouselItem>
               <CarouselItem>
                 <TestimonialCard 
-                  quote="The quality of each item is exceptional. I keep coming back because I know I'll find unique gifts every time."
+                  quote="I bought prayer journals for my whole family, including ones designed for my kids. It's become a beautiful shared practice, and we often discuss what God is teaching us."
                   author="Rachel T."
                   location="Jinja"
                 />
@@ -300,9 +315,9 @@ export default function Home() {
       {/* Newsletter */}
       <section className="py-16 bg-pink-50">
         <div className="container mx-auto px-4 md:px-6 text-center max-w-2xl">
-          <h2 className="text-3xl font-semibold mb-4">Stay Updated</h2>
+          <h2 className="text-3xl font-semibold mb-4">Join Our Community</h2>
           <p className="text-gray-700 mb-8">
-            Subscribe to our newsletter for gift ideas, new arrivals, and special offers.
+            Subscribe to our newsletter for prayer prompts, journal tips, and special offers.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto">
             <input
@@ -317,5 +332,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  );
+  ); 
 }

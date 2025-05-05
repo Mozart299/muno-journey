@@ -42,7 +42,7 @@ const navLinks = [
   { name: "Home", href: "/" },
   { name: "Shop All", href: "/products" },
   { name: "Categories", href: "#", dropdown: true },
-  { name: "Gift Finder", href: "/gift-finder" },
+  { name: "Journal Finder", href: "/journal-finder" },
   { name: "About Us", href: "/about" },
   { name: "Contact", href: "/contact" },
 ];

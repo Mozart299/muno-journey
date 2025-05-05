@@ -14,7 +14,7 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-lg mb-4">Muno Journey</h3>
             <p className="text-gray-600 mb-4">
-              Thoughtful gifts for every occasion. Handcrafted with love in Kampala, Uganda.
+            Discover our beautifully crafted prayer journals and spiritual gifts designed to enrich your faith and daily practice.
             </p>
             <div className="flex space-x-4">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
@@ -44,8 +44,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/gift-finder" className="text-gray-600 hover:text-pink-500">
-                  Gift Finder
+                <Link href="/journal-finder" className="text-gray-600 hover:text-pink-500">
+                  Journal Finder
                 </Link>
               </li>
               <li>
