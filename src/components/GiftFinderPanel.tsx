@@ -8,22 +8,22 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Gift, Search, Heart, DollarSign, CalendarDays, User, ChevronRight, ArrowRight } from "lucide-react";
+import { Gift, Search, Heart, Book, User, ChevronRight, BookOpen, Calendar } from "lucide-react";
 
 // Define types for our options
-type OccasionId = "birthday" | "anniversary" | "wedding" | "graduation" | "housewarming" | "thank-you" | "congratulations" | "other" | "";
-type RecipientId = "for-her" | "for-him" | "for-couples" | "for-kids" | "for-friends" | "for-family" | "";
-type InterestId = "reading" | "cooking" | "self-care" | "home-decor" | "travel" | "faith" | "writing" | "art" | "coffee";
+type OccasionId = "birthday" | "anniversary" | "graduation" | "thank-you" | "encouragement" | "spiritual-growth" | "holiday" | "other" | "";
+type RecipientId = "for-her" | "for-him" | "for-couples" | "for-teens" | "for-kids" | "for-pastor" | "for-friend" | "";
+type GiftTypeId = "journals" | "accessories" | "verse-cards" | "prayer-boxes" | "books" | "personalized";
 
 // Questions and options
 const occasions = [
-  { id: "birthday" as const, label: "Birthday", icon: <CalendarDays className="h-5 w-5" /> },
-  { id: "anniversary" as const, label: "Anniversary", icon: <CalendarDays className="h-5 w-5" /> },
-  { id: "wedding" as const, label: "Wedding", icon: <Gift className="h-5 w-5" /> },
+  { id: "birthday" as const, label: "Birthday", icon: <Calendar className="h-5 w-5" /> },
+  { id: "anniversary" as const, label: "Anniversary", icon: <Calendar className="h-5 w-5" /> },
   { id: "graduation" as const, label: "Graduation", icon: <Gift className="h-5 w-5" /> },
-  { id: "housewarming" as const, label: "Housewarming", icon: <Gift className="h-5 w-5" /> },
   { id: "thank-you" as const, label: "Thank You", icon: <Heart className="h-5 w-5" /> },
-  { id: "congratulations" as const, label: "Congratulations", icon: <Gift className="h-5 w-5" /> },
+  { id: "encouragement" as const, label: "Encouragement", icon: <Heart className="h-5 w-5" /> },
+  { id: "spiritual-growth" as const, label: "Spiritual Growth", icon: <BookOpen className="h-5 w-5" /> },
+  { id: "holiday" as const, label: "Holiday", icon: <Gift className="h-5 w-5" /> },
   { id: "other" as const, label: "Other", icon: <Gift className="h-5 w-5" /> },
 ];
 
@@ -31,21 +31,19 @@ const recipients = [
   { id: "for-her" as const, label: "For Her", icon: <User className="h-5 w-5" /> },
   { id: "for-him" as const, label: "For Him", icon: <User className="h-5 w-5" /> },
   { id: "for-couples" as const, label: "For Couples", icon: <User className="h-5 w-5" /> },
+  { id: "for-teens" as const, label: "For Teens", icon: <User className="h-5 w-5" /> },
   { id: "for-kids" as const, label: "For Kids", icon: <User className="h-5 w-5" /> },
-  { id: "for-friends" as const, label: "For Friends", icon: <User className="h-5 w-5" /> },
-  { id: "for-family" as const, label: "For Family", icon: <User className="h-5 w-5" /> },
+  { id: "for-pastor" as const, label: "For Pastor/Mentor", icon: <User className="h-5 w-5" /> },
+  { id: "for-friend" as const, label: "For Friend", icon: <User className="h-5 w-5" /> },
 ];
 
-const interests = [
-  { id: "reading" as const, label: "Reading" },
-  { id: "cooking" as const, label: "Cooking" },
-  { id: "self-care" as const, label: "Self-care" },
-  { id: "home-decor" as const, label: "Home Decor" },
-  { id: "travel" as const, label: "Travel" },
-  { id: "faith" as const, label: "Faith & Spirituality" },
-  { id: "writing" as const, label: "Writing & Journaling" },
-  { id: "art" as const, label: "Art & Creativity" },
-  { id: "coffee" as const, label: "Coffee & Tea" },
+const giftTypes = [
+  { id: "journals" as const, label: "Prayer Journals" },
+  { id: "accessories" as const, label: "Journal Accessories" },
+  { id: "verse-cards" as const, label: "Verse Cards" },
+  { id: "prayer-boxes" as const, label: "Prayer Boxes" },
+  { id: "books" as const, label: "Books" },
+  { id: "personalized" as const, label: "Personalized Gifts" },
 ];
 
 interface GiftFinderPanelProps {
@@ -57,13 +55,13 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
   const [step, setStep] = useState(1);
   const [selectedOccasion, setSelectedOccasion] = useState<OccasionId>("");
   const [selectedRecipient, setSelectedRecipient] = useState<RecipientId>("");
-  const [selectedInterests, setSelectedInterests] = useState<InterestId[]>([]);
+  const [selectedGiftTypes, setSelectedGiftTypes] = useState<GiftTypeId[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([100000]);
   const [customOccasion, setCustomOccasion] = useState("");
   
-  // Toggle interest selection
-  const toggleInterest = (id: InterestId) => {
-    setSelectedInterests(prev => 
+  // Toggle gift type selection
+  const toggleGiftType = (id: GiftTypeId) => {
+    setSelectedGiftTypes(prev => 
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
   };
@@ -85,8 +83,8 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
         searchParams.append("recipient", selectedRecipient);
       }
       
-      if (selectedInterests.length > 0) {
-        searchParams.append("interests", selectedInterests.join(","));
+      if (selectedGiftTypes.length > 0) {
+        searchParams.append("giftTypes", selectedGiftTypes.join(","));
       }
       
       searchParams.append("priceMax", priceRange[0].toString());
@@ -112,7 +110,7 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
       case 2:
         return selectedRecipient !== "";
       case 3:
-        return selectedInterests.length > 0;
+        return selectedGiftTypes.length > 0;
       case 4:
         return true;
       default:
@@ -235,26 +233,35 @@ export default function GiftFinderPanel({ onClose }: GiftFinderPanelProps) {
           
           {step === 3 && (
             <div className="space-y-6">
-              <h3 className="text-xl font-medium">What are their interests?</h3>
+              <h3 className="text-xl font-medium">What type of gift?</h3>
               <p className="text-gray-500">Select all that apply</p>
               
               <div className="grid grid-cols-2 gap-3">
-                {interests.map((interest) => (
-                  <div key={interest.id} className="flex items-center space-x-2">
+                {giftTypes.map((type) => (
+                  <div key={type.id} className="flex items-center space-x-2">
                     <Checkbox 
-                      id={`interest-${interest.id}`} 
-                      checked={selectedInterests.includes(interest.id as InterestId)}
-                      onCheckedChange={() => toggleInterest(interest.id as InterestId)}
+                      id={`type-${type.id}`} 
+                      checked={selectedGiftTypes.includes(type.id as GiftTypeId)}
+                      onCheckedChange={() => toggleGiftType(type.id as GiftTypeId)}
                     />
                     <Label 
-                      htmlFor={`interest-${interest.id}`}
+                      htmlFor={`type-${type.id}`}
                       className="cursor-pointer"
                     >
-                      {interest.label}
+                      {type.label}
                     </Label>
                   </div>
                 ))}
               </div>
+              
+              {selectedGiftTypes.includes("journals") && (
+                <div className="bg-pink-50 p-3 rounded-md">
+                  <div className="flex items-center">
+                    <Book className="h-5 w-5 text-pink-500 mr-2" />
+                    <p className="text-sm font-medium">Tip: For more specific journal options, try our Journal Finder!</p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
           

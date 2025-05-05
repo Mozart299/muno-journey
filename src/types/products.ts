@@ -7,10 +7,12 @@ export interface ProductType {
     currency: string;
     image?: string;
     category: string;
+    forWhom?: string[];
     description?: string;
     inStock?: boolean;
     occasions?: string[];
     recipients?: string[];
+    features?: string[];
   }
   
   export interface CategoryType {

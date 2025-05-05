@@ -1,9 +1,9 @@
-
 "use client";
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Gift, HelpCircle, Search } from "lucide-react";
+import { Gift, HelpCircle, Search, Book } from "lucide-react";
+import Link from "next/link";
 
 export default function GiftFinderBanner() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function GiftFinderBanner() {
             <div className="md:w-1/3 bg-pink-100 relative hidden md:block">
               <img
                 src="/gift-finder-image.jpg"
-                alt="Gift selection"
+                alt="Spiritual gift selection"
                 className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
@@ -28,11 +28,11 @@ export default function GiftFinderBanner() {
                 <Gift className="h-10 w-10 text-pink-500 mr-4" />
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                    Not sure what to gift?
+                    Find the Perfect Spiritual Gift
                   </h2>
                   <p className="text-gray-600 mb-6">
-                    Answer a few simple questions and we'll help you find the perfect gift 
-                    for any occasion. Our Gift Finder makes shopping stress-free!
+                    Looking for a meaningful gift to encourage spiritual growth? Answer a few 
+                    simple questions and we'll help you find the perfect prayer journal or devotional gift.
                   </p>
                 </div>
               </div>
@@ -42,46 +42,58 @@ export default function GiftFinderBanner() {
                   <div className="h-8 w-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-medium">
                     1
                   </div>
-                  <p>Tell us the occasion</p>
+                  <p>Select the occasion</p>
                 </div>
                 
                 <div className="flex items-center space-x-2">
                   <div className="h-8 w-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-medium">
                     2
                   </div>
-                  <p>Select who it's for</p>
+                  <p>Tell us who it's for</p>
                 </div>
                 
                 <div className="flex items-center space-x-2">
                   <div className="h-8 w-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-medium">
                     3
                   </div>
-                  <p>Choose your budget</p>
+                  <p>Choose gift type</p>
                 </div>
                 
                 <div className="flex items-center space-x-2">
                   <div className="h-8 w-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-medium">
                     4
                   </div>
-                  <p>Get personalized recommendations</p>
+                  <p>Set your budget</p>
                 </div>
               </div>
               
-              <div className="mt-8">
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button 
                   size="lg" 
                   className="bg-pink-500 hover:bg-pink-600"
                   onClick={() => router.push('/gift-finder')}
                 >
-                  <Search className="mr-2 h-4 w-4" />
-                  Find the Perfect Gift
+                  <Gift className="mr-2 h-4 w-4" />
+                  Find a Spiritual Gift
                 </Button>
                 
-                <p className="text-sm text-gray-500 mt-4 flex items-center">
-                  <HelpCircle className="h-4 w-4 mr-1" />
-                  Need more help? Contact our gift experts
-                </p>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="border-pink-500 text-pink-500 hover:bg-pink-50"
+                  asChild
+                >
+                  <Link href="/journal-finder">
+                    <Book className="mr-2 h-4 w-4" />
+                    Try Our Journal Finder
+                  </Link>
+                </Button>
               </div>
+              
+              <p className="text-sm text-gray-500 mt-4 flex items-center">
+                <HelpCircle className="h-4 w-4 mr-1" />
+                Looking specifically for a prayer journal? Our Journal Finder will give you more personalized options.
+              </p>
             </div>
           </div>
         </div>
