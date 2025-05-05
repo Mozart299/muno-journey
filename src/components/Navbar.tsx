@@ -48,12 +48,17 @@ const navLinks = [
 ];
 
 const categoryLinks = [
-  { name: "Gift Boxes", href: "/products?category=gift-boxes" },
-  { name: "Stationery", href: "/products?category=stationery" },
-  { name: "Home Decor", href: "/products?category=home-decor" },
-  { name: "Wellness", href: "/products?category=wellness" },
-  { name: "Accessories", href: "/products?category=accessories" },
-  { name: "Books", href: "/products?category=books" },
+  { name: "Daily Journals", href: "/products?category=daily-journals" },
+  { name: "Premium Daily Journals", href: "/products?category=premium-daily Journals" },
+  { name: "Kids Prayer Journal", href: "/products?category=kids Prayer Journal" },
+  { name: "Weekly Prayer Journals", href: "/products?category=weekly-prayer-journal" },
+  { name: "Teens Prayer Journal", href: "/products?category=teens-prayer-journal" },
+  { name: "Timeless Prayer Box", href: "/products?category=timeless-prayer-box" },
+  { name: "Alphabetical Verse Cards", href: "/products?category=alphabetical-verse-cards" },
+  { name: "Journal Personalisation", href: "/products?category=journal-personalisation" },
+  { name: "Journal Bookmarks", href: "/products?category=journal-bookmarks" },
+  { name: "Journal Supplies", href: "/products?category=journal-supplies" },
+  { name: "Gratitude Jars", href: "/products?category=gratitude-jars" },
 ];
 
 export default function Navbar() {
